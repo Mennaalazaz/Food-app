@@ -1,19 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../middlewares/auth'); 
-const {
-    createRestaurantController,
-    getAllRestaurantsController,
-    getRestaurantByIdController,
-    updateRestaurantController,
-    deleteRestaurantController
-} = require('../controllers/restaurantController');
+const restaurantController = require('../controllers/restaurantController');
+const auth = require('../middleware/authMiddleware');
 
-// CRUD routes
-router.post('/', verifyToken, createRestaurantController); // create
-router.get('/', getAllRestaurantsController);              // read all
-router.get('/:id', getRestaurantByIdController);           // read one
-router.put('/:id', verifyToken, updateRestaurantController); // update
-router.delete('/:id', verifyToken, deleteRestaurantController); // delete
+// Public
+router.get('/', restaurantController.getAllRestaurants);
+router.get('/:id', restaurantController.getRestaurantById);
+
+// Admin only
+router.post('/', auth.verifyToken, auth.verifyAdmin, restaurantController.createRestaurant);
+router.put('/:id', auth.verifyToken, auth.verifyAdmin, restaurantController.updateRestaurant);
+router.delete('/:id', auth.verifyToken, auth.verifyAdmin, restaurantController.deleteRestaurant);
+router.get('/:id/dashboard', auth.verifyToken, auth.verifyAdmin, restaurantController.getDashboard);
 
 module.exports = router;

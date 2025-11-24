@@ -1,17 +1,25 @@
 const express = require('express');
-require("dotenv").config();
-
 const app = express();
-const sequelize = require("./config/db");
-require("./models");
+const sequelize = require('./config/db');
+const cors = require('cors');
 
-sequelize.sync({ alter: true }).then(() => {
-  console.log("All tables synced!");
-});
+// Enable CORS for all routes
+app.use(cors());
 
+// Middleware
 app.use(express.json());
 
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/restaurants", require("./routes/restaurantRoutes"));
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/restaurants', require('./routes/restaurantRoutes'));
+app.use('/api/foods', require('./routes/foodRoutes'));
+app.use('/api/orders', require('./routes/orderRoutes'));
+app.use('/api/reviews', require('./routes/reviewRoutes'));
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+
+// Start server
+const PORT = process.env.PORT || 5000;
+sequelize.sync({ alter: true }).then(() => {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});

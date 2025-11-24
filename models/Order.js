@@ -4,12 +4,17 @@ const User = require('./User');
 const Restaurant = require('./Restaurant');
 
 const Order = sequelize.define('Order', {
-  totalAmount: { type: DataTypes.DECIMAL(10,2), allowNull: false },
-  status: { type: DataTypes.ENUM('Preparing','On the way','Delivered'), defaultValue: 'Preparing' }
-}, {
-  timestamps: true
+  totalPrice: {
+    type: DataTypes.DECIMAL(10,2),
+    allowNull: false
+  },
+  status: {
+    type: DataTypes.ENUM('Preparing', 'On the way', 'Delivered'),
+    defaultValue: 'Preparing'
+  }
 });
 
+// Associations
 Order.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Order, { foreignKey: 'userId' });
 

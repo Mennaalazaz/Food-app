@@ -1,109 +1,52 @@
+// Handles admin operations for restaurants and dashboard.
+
 const Restaurant = require('../models/Restaurant');
+const Order = require('../models/Order');
+const Food = require('../models/Food');
 
-// Create a new restaurant
-const createRestaurantController = async (req, res) => {
-  try {
-    const { name, email, phone, address, logoURL, foods, delivery, pickup, isOpen, rating } = req.body;
-
-    if (!name || !email) {
-      return res.status(400).json({ error: "Name and email are required" });
-    }
-
-    // Check if restaurant already exists
-    const existedRestaurant = await Restaurant.findOne({ where: { email } });
-    if (existedRestaurant) {
-      return res.status(409).json({ error: "Restaurant with this email already exists" });
-    }
-
-    const newRestaurant = await Restaurant.create({
-      name,
-      email,
-      phone,
-      address,
-      logoURL,
-      foods: foods || [],
-      delivery: delivery || false,
-      pickup: pickup || false,
-      isOpen: isOpen !== undefined ? isOpen : true,
-      rating: rating || 0
-    });
-
-    res.status(201).json({ message: "Restaurant created successfully", restaurant: newRestaurant });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to create restaurant" });
-  }
+const getAllRestaurants = async (req, res) => {
+  const restaurants = await Restaurant.findAll();
+  res.json(restaurants);
 };
 
-// Get all restaurants
-const getAllRestaurantsController = async (req, res) => {
-  try {
-    const restaurants = await Restaurant.findAll();
-    res.status(200).json(restaurants);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch restaurants" });
-  }
+const getRestaurantById = async (req, res) => {
+  const restaurant = await Restaurant.findByPk(req.params.id, {
+    include: [Food]
+  });
+  res.json(restaurant);
 };
 
-// Get a single restaurant by ID
-const getRestaurantByIdController = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findByPk(req.params.id); 
-    if (!restaurant) return res.status(404).json({ error: "Restaurant not found" });
-    res.status(200).json(restaurant);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch restaurant" });
-  }
+const createRestaurant = async (req, res) => {
+  const { name, email, phone, address, logoURL } = req.body;
+  const restaurant = await Restaurant.create({ name, email, phone, address, logoURL });
+  res.status(201).json(restaurant);
 };
 
-// Update restaurant
-const updateRestaurantController = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findByPk(req.params.id);
-    if (!restaurant) return res.status(404).json({ error: "Restaurant not found" });
-
-    const { name, email, phone, address, logoURL, foods, delivery, pickup, isOpen, rating } = req.body;
-
-    restaurant.name = name || restaurant.name;
-    restaurant.email = email || restaurant.email;
-    restaurant.phone = phone || restaurant.phone;
-    restaurant.address = address || restaurant.address;
-    restaurant.logoURL = logoURL || restaurant.logoURL;
-    restaurant.foods = foods || restaurant.foods;
-    restaurant.delivery = delivery !== undefined ? delivery : restaurant.delivery;
-    restaurant.pickup = pickup !== undefined ? pickup : restaurant.pickup;
-    restaurant.isOpen = isOpen !== undefined ? isOpen : restaurant.isOpen;
-    restaurant.rating = rating || restaurant.rating;
-
-    await restaurant.save();
-
-    res.status(200).json({ message: "Restaurant updated successfully", restaurant });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to update restaurant" });
-  }
+const updateRestaurant = async (req, res) => {
+  const restaurant = await Restaurant.findByPk(req.params.id);
+  Object.assign(restaurant, req.body);
+  await restaurant.save();
+  res.json(restaurant);
 };
 
-// Delete restaurant
-const deleteRestaurantController = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findByPk(req.params.id);
-    if (!restaurant) return res.status(404).json({ error: "Restaurant not found" });
+const deleteRestaurant = async (req, res) => {
+  await Restaurant.destroy({ where: { id: req.params.id } });
+  res.json({ message: 'Restaurant deleted' });
+};
 
-    await restaurant.destroy();
-    res.status(200).json({ message: "Restaurant deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to delete restaurant" });
-  }
+// Dashboard example: total orders and sales
+const getDashboard = async (req, res) => {
+  const restaurantId = req.params.id;
+  const orders = await Order.findAll({ where: { restaurantId } });
+  const totalSales = orders.reduce((sum, order) => sum + parseFloat(order.totalPrice), 0);
+  res.json({ totalOrders: orders.length, totalSales });
 };
 
 module.exports = {
-    createRestaurantController,
-    getAllRestaurantsController,
-    getRestaurantByIdController,
-    updateRestaurantController,
-    deleteRestaurantController
+  getAllRestaurants,
+  getRestaurantById,
+  createRestaurant,
+  updateRestaurant,
+  deleteRestaurant,
+  getDashboard
 };

@@ -14,6 +14,7 @@
   "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -22,5 +23,13 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mennaalazaz/Food-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mennaalazaz/Food-app/issues"
+  },
+  "homepage": "https://github.com/Mennaalazaz/Food-app#readme"
 }

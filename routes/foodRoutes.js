@@ -1,0 +1,15 @@
+const express = require('express');
+const router = express.Router();
+const foodController = require('../controllers/foodController');
+const auth = require('../middleware/authMiddleware');
+
+// Public
+router.get('/', foodController.getAllFoods);
+router.get('/:id', foodController.getFoodById);
+
+// Admin only
+router.post('/', auth.verifyToken, auth.verifyAdmin, foodController.createFood);
+router.put('/:id', auth.verifyToken, auth.verifyAdmin, foodController.updateFood);
+router.delete('/:id', auth.verifyToken, auth.verifyAdmin, foodController.deleteFood);
+
+module.exports = router;

@@ -1,24 +1,27 @@
-// This file imports all models (NO circular imports)
-const sequelize = require("../config/db");
+// this to load all models and associations
 
-const User = require("./User");
-const Restaurant = require("./Restaurant");
-const Category = require("./Category");
-const MenuItem = require("./MenuItem");
-const Order = require("./Order");
-const OrderItem = require("./OrderItem");
-const Rating = require("./Rating");
-const Payment = require("./Payment");
+const sequelize = require('../config/db');
 
-// exporting all models and sequelize instance
+const User = require('./User');
+const Restaurant = require('./Restaurant');
+const Category = require('./Category');
+const Food = require('./Food');
+const Order = require('./Order');
+const OrderItem = require('./OrderItem');
+const Review = require('./Review');
+
+// Synchronize all models
+sequelize.sync({ alter: true }) // alter:true updates DB without dropping
+  .then(() => console.log('Database synced successfully!'))
+  .catch(err => console.error('Database sync error:', err));
+
 module.exports = {
   sequelize,
   User,
   Restaurant,
   Category,
-  MenuItem,
+  Food,
   Order,
   OrderItem,
-  Rating,
-  Payment
+  Review
 };
