@@ -4,7 +4,7 @@ const reviewController = require('../controllers/reviewController');
 const auth = require('../middleware/authMiddleware');
 
 // Customer
-router.post('/', auth.verifyToken, auth.verifyUser, reviewController.addReview);
+router.post('/', auth.verifyToken, auth.isUser, reviewController.addReview);
 
 // Public
 router.get('/food/:foodId', reviewController.getReviewsByFood);

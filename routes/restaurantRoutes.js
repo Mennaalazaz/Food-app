@@ -8,9 +8,9 @@ router.get('/', restaurantController.getAllRestaurants);
 router.get('/:id', restaurantController.getRestaurantById);
 
 // Admin only
-router.post('/', auth.verifyToken, auth.verifyAdmin, restaurantController.createRestaurant);
-router.put('/:id', auth.verifyToken, auth.verifyAdmin, restaurantController.updateRestaurant);
-router.delete('/:id', auth.verifyToken, auth.verifyAdmin, restaurantController.deleteRestaurant);
-router.get('/:id/dashboard', auth.verifyToken, auth.verifyAdmin, restaurantController.getDashboard);
+router.post('/', auth.verifyToken, auth.isRestaurant, restaurantController.createRestaurant);
+router.put('/:id', auth.verifyToken, auth.isRestaurant, restaurantController.updateRestaurant);
+router.delete('/:id', auth.verifyToken, auth.isRestaurant, restaurantController.deleteRestaurant);
+router.get('/:id/dashboard', auth.verifyToken, auth.isRestaurant, restaurantController.getDashboard);
 
 module.exports = router;

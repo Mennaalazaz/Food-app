@@ -11,6 +11,10 @@ const Restaurant = sequelize.define('Restaurant', {
     allowNull: false,
     unique: true
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   phone: DataTypes.STRING,
   address: DataTypes.STRING,
   logoURL: DataTypes.STRING

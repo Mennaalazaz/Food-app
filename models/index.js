@@ -11,7 +11,7 @@ const OrderItem = require('./OrderItem');
 const Review = require('./Review');
 
 // Synchronize all models
-sequelize.sync({ alter: true }) // alter:true updates DB without dropping
+sequelize.sync({force: true }) // alter:true updates DB without dropping
   .then(() => console.log('Database synced successfully!'))
   .catch(err => console.error('Database sync error:', err));
 

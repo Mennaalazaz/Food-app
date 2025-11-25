@@ -19,10 +19,6 @@ const User = sequelize.define('User', {
   phone: {
     type: DataTypes.STRING,
     allowNull: true
-  },
-  role: { 
-    type: DataTypes.ENUM('user', 'admin'), // 'user' = customer, 'admin' = restaurant admin
-    defaultValue: 'user' 
   }
 });
 
