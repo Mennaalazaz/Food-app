@@ -11,12 +11,11 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/restaurants', require('./routes/restaurantRoutes'));
 app.use('/api/foods', require('./routes/foodRoutes'));
+app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
-app.use('/api/reviews', require('./routes/reviewRoutes'));
-
+app.use('/api/restaurants', require('./routes/restaurantRoutes'));
+// app.use('/api/reviews', require('./routes/reviewRoutes'));
 
 // Start server
 const PORT = process.env.PORT || 5000;

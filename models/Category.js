@@ -1,12 +1,14 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
 
-const Category = sequelize.define('Category', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  }
+const Category = sequelize.define("Category", {
+  Category_ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  Name: { type: DataTypes.STRING(100), allowNull: false },
+  CreatedAt: { type: DataTypes.DATE },
+  UpdatedAt: { type: DataTypes.DATE }
+}, {
+  tableName: "Category",
+  timestamps: false
 });
 
 module.exports = Category;

@@ -1,34 +1,53 @@
-// Handles menu management for admin and browsing for users.
 const Food = require('../models/Food');
-const Category = require('../models/Category');
-const Restaurant = require('../models/Restaurant');
 
-const getAllFoods = async (req, res) => {
-  const foods = await Food.findAll({ include: [Category, Restaurant] });
-  res.json(foods);
+// Add food
+exports.addFood = async (req, res) => {
+  try {
+    const { Restaurant_ID, Category_ID, Name, Description, Price, imageURL } = req.body;
+    const food = await Food.create({ Restaurant_ID, Category_ID, Name, Description, Price, imageURL });
+    res.json({ Food_ID: food.Food_ID, Name: food.Name });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-const getFoodById = async (req, res) => {
-  const food = await Food.findByPk(req.params.id, { include: [Category, Restaurant] });
-  res.json(food);
+// List foods by restaurant
+exports.listFoodsByRestaurant = async (req, res) => {
+  try {
+    const { restaurant_id } = req.params;
+
+    const foods = await Food.findAll({
+      where: { Restaurant_ID: restaurant_id }
+    });
+
+    res.json(foods);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-const createFood = async (req, res) => {
-  const { name, description, price, imageURL, categoryId, restaurantId } = req.body;
-  const food = await Food.create({ name, description, price, imageURL, categoryId, restaurantId });
-  res.status(201).json(food);
-};
 
-const updateFood = async (req, res) => {
-  const food = await Food.findByPk(req.params.id);
-  Object.assign(food, req.body);
-  await food.save();
-  res.json(food);
-};
+// List foods by category
+exports.listFoodsByCategory = async (req, res) => {
+  try {
+    const { category_id } = req.params;
+    const foods = await Food.findAll({ where: { Category_ID: category_id } });
+    res.json(foods);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};  
 
-const deleteFood = async (req, res) => {
-  await Food.destroy({ where: { id: req.params.id } });
-  res.json({ message: 'Food deleted' });
+// Get food details
+exports.getFoodDetails = async (req, res) => {
+  try {
+    const { food_id } = req.params;
+    const food = await Food.findByPk(food_id);
+    if (!food) {
+      return res.status(404).json({ message: 'Food not found' });
+    }
+    res.json(food);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
-
-module.exports = { getAllFoods, getFoodById, createFood, updateFood, deleteFood };

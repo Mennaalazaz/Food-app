@@ -1,25 +1,16 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
-const Order = require('./Order');
-const Food = require('./Food');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
 
-const OrderItem = sequelize.define('OrderItem', {
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 1
-  },
-  price: {
-    type: DataTypes.DECIMAL(10,2),
-    allowNull: false
-  }
+const Order_Item = sequelize.define("Order_Item", {
+  Order_Item_ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  Order_ID: { type: DataTypes.INTEGER, allowNull: false },
+  Food_ID: { type: DataTypes.INTEGER, allowNull: false },
+  Quantity: { type: DataTypes.INTEGER, defaultValue: 1 },
+  Price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+  Subtotal: { type: DataTypes.DECIMAL(10, 2) } 
+}, {
+  tableName: "Order_Item",
+  timestamps: false
 });
 
-// Associations
-OrderItem.belongsTo(Order, { foreignKey: 'orderId', onDelete: 'CASCADE' });
-Order.hasMany(OrderItem, { foreignKey: 'orderId' });
-
-OrderItem.belongsTo(Food, { foreignKey: 'foodId' });
-Food.hasMany(OrderItem, { foreignKey: 'foodId' });
-
-module.exports = OrderItem;
+module.exports = Order_Item;

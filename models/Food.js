@@ -1,26 +1,18 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
-const Restaurant = require('./Restaurant');
-const Category = require('./Category');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
 
-const Food = sequelize.define('Food', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  description: DataTypes.TEXT,
-  price: {
-    type: DataTypes.DECIMAL(10,2),
-    allowNull: false
-  },
-  imageURL: DataTypes.STRING
+const Food = sequelize.define("Food", {
+  Food_ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  Restaurant_ID: { type: DataTypes.INTEGER, allowNull: false },
+  Category_ID: { type: DataTypes.INTEGER, allowNull: false },
+  Name: { type: DataTypes.STRING(100), allowNull: false },
+  Description: { type: DataTypes.STRING(255) },
+  Price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+  imageURL: { type: DataTypes.STRING(255) },
+  is_active: { type: DataTypes.BOOLEAN, defaultValue: true }
+}, {
+  tableName: "Food",
+  timestamps: false
 });
-
-// Associations
-Food.belongsTo(Restaurant, { foreignKey: 'restaurantId', onDelete: 'CASCADE' });
-Restaurant.hasMany(Food, { foreignKey: 'restaurantId' });
-
-Food.belongsTo(Category, { foreignKey: 'categoryId' });
-Category.hasMany(Food, { foreignKey: 'categoryId' });
 
 module.exports = Food;

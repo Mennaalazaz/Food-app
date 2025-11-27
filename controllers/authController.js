@@ -26,14 +26,15 @@ const register = async (req, res) => {
         password: hashedPassword,
         phone,
         address,
-        logoURL
+        logoURL,
+        is_active: true
       });
-      const token = jwt.sign({ restaurantId: restaurant.id, email }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: restaurant.Restaurant_ID, email }, process.env.JWT_SECRET);
       return res.status(201).json({ type: "restaurant", restaurant, token });
     } else {
       // Register as normal user
       const user = await User.create({ username, email, password: hashedPassword, phone });
-      const token = jwt.sign({ id: user.id, email }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user.User_ID, email }, process.env.JWT_SECRET);
       return res.status(201).json({ type: "user", user, token });
     }
 
@@ -53,7 +54,7 @@ const login = async (req, res) => {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-      const token = jwt.sign({ id: user.id, email }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user.User_ID, email, type: "user" }, process.env.JWT_SECRET);
       return res.json({ type: "user", user, token });
     }
 
@@ -62,7 +63,7 @@ const login = async (req, res) => {
     if (restaurant) {
       const isMatch = await bcrypt.compare(password, restaurant.password);
       if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-      const token = jwt.sign({ restaurantId: restaurant.id, email }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: restaurant.Restaurant_ID, email, type: "restaurant" }, process.env.JWT_SECRET);
       return res.json({ type: "restaurant", restaurant, token });
     }
 

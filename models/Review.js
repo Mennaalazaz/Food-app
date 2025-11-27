@@ -1,22 +1,18 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
-const User = require('./User');
-const Food = require('./Food');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
 
-const Review = sequelize.define('Review', {
-  rating: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    validate: { min: 1, max: 5 }
-  },
-  comment: DataTypes.TEXT
+const Review = sequelize.define("Review", {
+  Review_ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  Rating: { type: DataTypes.INTEGER, allowNull: false },
+  Comment: { type: DataTypes.TEXT },
+  User_ID: { type: DataTypes.INTEGER, allowNull: false },
+  Restaurant_ID: { type: DataTypes.INTEGER, allowNull: false },
+  Food_ID: { type: DataTypes.INTEGER },
+  CreatedAt: { type: DataTypes.DATE },
+  UpdatedAt: { type: DataTypes.DATE }
+}, {
+  tableName: "Review",
+  timestamps: false
 });
-
-// Associations
-Review.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Review, { foreignKey: 'userId' });
-
-Review.belongsTo(Food, { foreignKey: 'foodId' });
-Food.hasMany(Review, { foreignKey: 'foodId' });
 
 module.exports = Review;

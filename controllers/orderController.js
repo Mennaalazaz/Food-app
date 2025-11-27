@@ -1,56 +1,95 @@
-// Handles orders, checkout, and status updates.
-const Order = require('../models/Order');
-const OrderItem = require('../models/OrderItem');
-const Food = require('../models/Food');
+const { Order_Details, Order_Item, Food } = require("../models");
 
-const createOrder = async (req, res) => {
-  const { items, restaurantId } = req.body; // items = [{foodId, quantity}]
-  if (!items || items.length === 0) return res.status(400).json({ message: 'Cart is empty' });
+const placeOrder = async (req, res) => {
+  const { userId, restaurantId, cart, paymentMethod } = req.body;
 
-  let totalPrice = 0;
-  for (const item of items) {
-    const food = await Food.findByPk(item.foodId);
-    totalPrice += parseFloat(food.price) * item.quantity;
-  }
+  try {
+    if (!cart || cart.length === 0) {
+      return res.status(400).json({ message: "Cart is empty" });
+    }
 
-  const order = await Order.create({ userId: req.user.id, restaurantId, totalPrice });
+    // Calculate total price
+    let totalPrice = 0;
+    for (let item of cart) {
+      const food = await Food.findByPk(item.foodId);
+      if (!food)
+        return res.status(400).json({
+          message: `Food ID ${item.foodId} not found`,
+        });
 
-  for (const item of items) {
-    const food = await Food.findByPk(item.foodId);
-    await OrderItem.create({
-      orderId: order.id,
-      foodId: food.id,
-      quantity: item.quantity,
-      price: food.price
+      totalPrice += food.Price * item.quantity;
+    }
+
+    // Create order
+    const order = await Order_Details.create({
+      User_ID: userId,
+      Restaurant_ID: restaurantId,
+      Price: totalPrice,
+      Payment_Method: paymentMethod || "cash",
+      status: "pending",
     });
+
+    // Create each order item
+    for (let item of cart) {
+      const food = await Food.findByPk(item.foodId);
+
+      await Order_Item.create({
+        Order_ID: order.Order_ID,
+        Food_ID: food.Food_ID,
+        Quantity: item.quantity,
+        Price: food.Price,
+        Subtotal: food.Price * item.quantity,
+      });
+    }
+
+    return res.status(201).json({
+      message: "Order placed successfully",
+      orderId: order.Order_ID,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
-
-  res.status(201).json(order);
-};
-
-const getOrderById = async (req, res) => {
-  const order = await Order.findByPk(req.params.id, {
-    include: [OrderItem]
-  });
-  res.json(order);
-};
-
-const updateOrderStatus = async (req, res) => {
-  const { status } = req.body; // 'Preparing', 'On the way', 'Delivered'
-  const order = await Order.findByPk(req.params.id);
-  order.status = status;
-  await order.save();
-  res.json(order);
 };
 
 const getUserOrders = async (req, res) => {
-  const orders = await Order.findAll({ where: { userId: req.user.id }, include: [OrderItem] });
-  res.json(orders);
+  const userId = req.params.user_id;
+
+  try {
+    const orders = await Order_Details.findAll({
+      where: { User_ID: userId },
+      include: [
+        {
+          model: Order_Item,
+          include: [Food],
+        },
+      ],
+    });
+
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
-const getRestaurantOrders = async (req, res) => {
-  const orders = await Order.findAll({ where: { restaurantId: req.params.id }, include: [OrderItem] });
-  res.json(orders);
+const getOrdersByRestaurant = async (req, res) => {
+  const restaurantId = req.params.id;
+  try {
+    const orders = await Order_Details.findAll({
+      where: { Restaurant_ID: restaurantId },
+      include: [
+        {
+          model: Order_Item,
+          include: [Food],
+        },
+      ],
+    });
+    res.json(orders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  } 
 };
 
-module.exports = { createOrder, getOrderById, updateOrderStatus, getUserOrders, getRestaurantOrders };
+module.exports = { placeOrder, getUserOrders, getOrdersByRestaurant };

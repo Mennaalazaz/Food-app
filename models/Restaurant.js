@@ -1,24 +1,17 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); 
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
 
-const Restaurant = sequelize.define('Restaurant', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  phone: DataTypes.STRING,
-  address: DataTypes.STRING,
-  logoURL: DataTypes.STRING
+const Restaurant = sequelize.define("Restaurant", {
+  Restaurant_ID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING(100), allowNull: false },
+  email: { type: DataTypes.STRING(100), unique: true },
+  password: { type: DataTypes.STRING(255), allowNull: false },
+  phone: { type: DataTypes.STRING(50), allowNull: false },
+  address: { type: DataTypes.STRING(255) },
+  logoURL: { type: DataTypes.STRING(255) },
+  is_active: { type: DataTypes.BOOLEAN, defaultValue: true }
 }, {
+  tableName: "Restaurant",
   timestamps: true
 });
 

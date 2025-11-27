@@ -1,28 +1,33 @@
-// Handles authentication and isRestaurant/isUser checks.
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.status(403).json({ error: "Token missing" });
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) return res.status(403).json({ error: "Token missing" });
 
-  const extractedToken = token.split(" ")[1]; // "Bearer TOKEN_HERE"
+    const token = authHeader.split(" ")[1]; // Bearer TOKEN_HERE
+    if (!token) return res.status(403).json({ error: "Token missing" });
 
-  jwt.verify(extractedToken, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(401).json({ error: "Invalid token" });
-    req.user = decoded; // { id: userId } or { restaurantId: restaurantId }
-    next();
-  });
+    const secret = process.env.JWT_SECRET || "default_secret";
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) return res.status(401).json({ error: "Invalid token" });
+      req.user = decoded; // contains { id, email, type }
+      next();
+    });
+  } catch (err) {
+    return res.status(500).json({ error: "Token verification failed" });
+  }
 };
 
-// Check if logged in entity is a restaurant
+// Only allow restaurants
 const isRestaurant = (req, res, next) => {
-  if (!req.user.restaurantId) return res.status(403).json({ error: "Not a restaurant" });
+  if (req.user.type !== "restaurant") return res.status(403).json({ error: "Not a restaurant" });
   next();
 };
 
-// Check if logged in entity is a normal user
+// Only allow normal users
 const isUser = (req, res, next) => {
-  if (!req.user.id) return res.status(403).json({ error: "Not a user" });
+  if (req.user.type !== "user") return res.status(403).json({ error: "Not a user" });
   next();
 };
 

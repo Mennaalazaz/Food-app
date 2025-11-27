@@ -1,15 +1,17 @@
-// Handles ratings and feedback.
 const Review = require('../models/Review');
 
-const addReview = async (req, res) => {
-  const { foodId, rating, comment } = req.body;
-  const review = await Review.create({ userId: req.user.id, foodId, rating, comment });
-  res.status(201).json(review);
+// Add review
+exports.addReview = async (req, res) => {
+  //  to be implemented ..
 };
 
-const getReviewsByFood = async (req, res) => {
-  const reviews = await Review.findAll({ where: { foodId: req.params.foodId } });
-  res.json(reviews);
+
+// List reviews by food
+exports.listReviewsByFood = async (req, res) => {
+  //  to be implemented ..
 };
 
-module.exports = { addReview, getReviewsByFood };
+// List reviews by restaurant
+exports.listReviewsByRestaurant = async (req, res) => {
+  //  to be implemented ..
+};
