@@ -15,7 +15,9 @@ app.use('/api/foods', require('./routes/foodRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/restaurants', require('./routes/restaurantRoutes'));
-// app.use('/api/reviews', require('./routes/reviewRoutes'));
+app.use('/api/reviews', require('./routes/reviewRoutes'));
+app.use('/api/reports', require('./routes/reportsRoutes'));
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 
 // Start server
 const PORT = process.env.PORT || 5000;

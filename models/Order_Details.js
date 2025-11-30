@@ -18,7 +18,9 @@ const Order_Details = sequelize.define("Order_Details", {
   UpdatedAt: { type: DataTypes.DATE }
 }, {
   tableName: "Order_Details",
-  timestamps: false
+  timestamps: true,
+  createdAt: "CreatedAt",
+  updatedAt: "UpdatedAt"
 });
 
 module.exports = Order_Details;
