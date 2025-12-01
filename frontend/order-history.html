@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Order History</title>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="close-btn" onclick="closeSidebar()">×</a>
+  <img src="./assets/FOODIES Logo.png" alt="FOODIES Logo" class="sidebar-logo">
+  <a href="Home.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="trackMyOrder.html">Track Your Order</a>
+  <a href="order-history.html">Order History</a>
+  <a href="index.html">Sign Out</a>
+</div>
+<header>
+  <button class="open-btn" onclick="openSidebar()">☰</button>
+</header>
+
+<!-- Order History Section -->
+<section class="track-container">
+  <h1>Order History</h1>
+
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Total Amount</th>
+        <th>Day Ordered</th>
+        <th>Day Delivered</th>
+        <th>Items Ordered</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#12345</td>
+        <td>$25</td>
+        <td>Nov 20, 2025</td>
+        <td>Nov 21, 2025</td>
+        <td>
+          <ul>
+            <li>Pepperoni Pizza (1)</li>
+            <li>Classic Burger (1)</li>
+          </ul>
+        </td>
+        <td><button class="theme-btn">Buy Again</button></td>
+      </tr>
+      <tr>
+        <td>#12346</td>
+        <td>$40</td>
+        <td>Nov 22, 2025</td>
+        <td>Nov 23, 2025</td>
+        <td>
+          <ul>
+            <li>Cheeseburger (2)</li>
+            <li>Fries (1)</li>
+            <li>Milkshake (1)</li>
+          </ul>
+        </td>
+        <td><button class="theme-btn">Buy Again</button></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-about">
+      <h3>About Us</h3>
+      <p>We bring delicious meals from your favorite restaurants straight to your door. Fast, fresh, and reliable.</p>
+    </div>
+    <div class="footer-contact">
+      <h3>Contact</h3>
+      <p>Email: support@foodies.com</p>
+      <p>Phone: +20 123 456 789</p>
+      <p>Address: Alexandria, Egypt</p>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2025 Foodies. All rights reserved.</p>
+</footer>
+
+<script src="index.js"></script>
+</body>
+</html>

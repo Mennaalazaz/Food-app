@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Checkout</title>
+</head>
+<body>
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="close-btn" onclick="closeSidebar()">×</a>
+  <img src="./assets/FOODIES Logo.png" alt="FOODIES Logo" class="sidebar-logo">
+  <a href="Home.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="trackMyOrder.html">Track Your Order</a>
+  <a href="order-history.html">Order History</a>
+  <a href="index.html">Sign Out</a>
+</div>
+
+<header>
+  <button class="open-btn" onclick="openSidebar()">☰</button>
+</header>
+
+<!-- Checkout Section -->
+<section class="checkout-container">
+  <h1>Checkout</h1>
+
+  <!-- Customer Info -->
+  <form class="checkout-form" id="checkoutForm">
+    <h2>Customer Information</h2>
+    <input type="text" id="customerName" placeholder="Full Name" required>
+    <input type="email" id="customerEmail" placeholder="Email Address" required>
+    <input type="tel" id="customerPhone" placeholder="Phone Number" required pattern="[0-9]{11}">
+
+    <!-- Delivery Address -->
+    <h2>Delivery Address</h2>
+    <input type="text" id="streetAddress" placeholder="Street Address" required>
+    <input type="text" id="city" placeholder="City" required>
+    <input type="text" id="postalCode" placeholder="Postal Code" required>
+
+    <!-- Payment Method -->
+    <h2>Payment Method</h2>
+    <label><input type="radio" name="payment" value="cash" required> Cash on Delivery</label>
+    <label><input type="radio" name="payment" value="card"> Credit/Debit Card</label>
+    <label><input type="radio" name="payment" value="wallet"> Mobile Wallet</label>
+
+    <!-- Order Summary -->
+    <h2>Order Summary</h2>
+    <div class="order-summary" id="orderSummary">
+      <p>Pepperoni Pizza x1 — $12</p>
+      <p>Classic Burger x2 — $16</p>
+      <hr>
+      <p><strong>Total: $28</strong></p>
+    </div>
+
+    <!-- Checkout Button -->
+    <button type="submit" class="checkout-btn">Place Order</button>
+  </form>
+</section>
+
+<!-- Order Confirmation Modal -->
+<div id="orderConfirmModal" class="review-modal">
+  <div class="review-modal-content">
+    <h2>🎉 Order Placed Successfully!</h2>
+    <p id="orderNumberDisplay">Order #<span id="orderNumber"></span></p>
+    <p>Your order is being prepared</p>
+    <button class="theme-btn" onclick="goToTrackOrder()">Track My Order</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-about">
+      <h3>About Us</h3>
+      <p>We bring delicious meals from your favorite restaurants straight to your door. Fast, fresh, and reliable.</p>
+    </div>
+    <div class="footer-contact">
+      <h3>Contact</h3>
+      <p>Email: support@foodies.com</p>
+      <p>Phone: +20 123 456 789</p>
+      <p>Address: Alexandria, Egypt</p>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2025 Foodies. All rights reserved.</p>
+</footer>
+
+<script src="index.js"></script>
+</body>
+</html>

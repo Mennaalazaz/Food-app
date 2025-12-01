@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Manage Orders</title>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <img src="./assets/FOODIES Logo.png" alt="FOODIES Logo" class="sidebar-logo">
+  <a href="Dashboard.html">Dashboard</a>
+  <a href="manage-orders.html">Manage Orders</a>
+  <a href="reports.html">Reports</a>
+  <a href="index.html">Sign Out</a>
+  <a href="javascript:void(0)" class="close-btn" onclick="closeSidebar()">×</a>
+</div>
+
+<header>
+  <button class="open-btn" onclick="openSidebar()">☰</button>
+</header>
+
+<!-- Manage Orders Section -->
+<section class="dashboard-container">
+  <h1>Manage Orders</h1>
+
+  <!-- Orders Table -->
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#12345</td>
+        <td>Hania</td>
+        <td>Pepperoni Pizza (1), Classic Burger (1)</td>
+        <td>$20</td>
+        <td><span class="status pending">Pending</span></td>
+        <td>
+          <button class="theme-btn">Mark Preparing</button>
+          <button class="theme-btn secondary">Cancel</button>
+        </td>
+      </tr>
+      <tr>
+        <td>#12346</td>
+        <td>Ahmed</td>
+        <td>Cheeseburger (2), Fries (1)</td>
+        <td>$15</td>
+        <td><span class="status preparing">Preparing</span></td>
+        <td>
+          <button class="theme-btn">Mark Out for Delivery</button>
+        </td>
+      </tr>
+      <tr>
+        <td>#12347</td>
+        <td>Sarah</td>
+        <td>Margherita Pizza (1), Coke (2)</td>
+        <td>$18</td>
+        <td><span class="status delivered">Delivered</span></td>
+        <td>
+          <button class="theme-btn">View</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-about">
+      <h3>About Us</h3>
+      <p>We bring delicious meals from your favorite restaurants straight to your door. Fast, fresh, and reliable.</p>
+    </div>
+    <div class="footer-contact">
+      <h3>Contact</h3>
+      <p>Email: support@foodies.com</p>
+      <p>Phone: +20 123 456 789</p>
+      <p>Address: Alexandria, Egypt</p>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2025 Foodies. All rights reserved.</p>
+</footer>
+
+<script src="index.js"></script>
+</body>
+</html>

@@ -20,7 +20,7 @@ app.use('/api/reports', require('./routes/reportsRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 
 // Start server
-const PORT = process.env.PORT || 5000;
-sequelize.sync({ alter: true }).then(() => {
+const PORT = process.env.PORT || 3000;
+sequelize.sync().then(() => {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Shopping Cart</title>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="close-btn" onclick="closeSidebar()">×</a>
+  <img src="./assets/FOODIES Logo.png" alt="FOODIES Logo" class="sidebar-logo">
+  <a href="Home.html">Home</a>
+  <a href="menu.html">Menu</a>
+  <a href="cart.html">Cart</a>
+  <a href="trackMyOrder.html">Track Your Order</a>
+  <a href="order-history.html">Order History</a>
+  <a href="index.html">Sign Out</a>
+</div>
+
+<header>
+  <button class="open-btn" onclick="openSidebar()">☰</button>
+</header>
+
+<!-- Cart Section -->
+<section class="cart-container">
+  <h1>Your Shopping Cart</h1>
+
+  <div class="cart-items">
+    <div class="cart-item">
+      <img src="./assets/pepperoni-4991789_1280.jpg" alt="Pepperoni Pizza">
+      <div class="item-details">
+        <h3>Pepperoni Pizza</h3>
+        <p>$12</p>
+        <label>Qty: <input type="number" value="1" min="1"></label>
+      </div>
+      <button class="remove-btn">Remove</button>
+    </div>
+
+    <div class="cart-item">
+      <img src="./assets/hamburger-7422976_1280.jpg" alt="Classic Burger">
+      <div class="item-details">
+        <h3>Classic Burger</h3>
+        <p>$8</p>
+        <label>Qty: <input type="number" value="2" min="1"></label>
+      </div>
+      <button class="remove-btn">Remove</button>
+    </div>
+  </div>
+
+  <!-- Cart Summary -->
+  <div class="cart-summary">
+    <p>Subtotal: <strong>$28</strong></p>
+    <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+  </div>
+</section>
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-about">
+      <h3>About Us</h3>
+      <p>We bring delicious meals from your favorite restaurants straight to your door. Fast, fresh, and reliable.</p>
+    </div>
+    <div class="footer-contact">
+      <h3>Contact</h3>
+      <p>Email: support@foodies.com</p>
+      <p>Phone: +20 123 456 789</p>
+      <p>Address: Alexandria, Egypt</p>
+    </div>
+  </div>
+    
+
+  <p class="footer-bottom">© 2025 Foodies. All rights reserved.</p>
+</footer>
+
+
+<script src="index.js"></script>
+
+</body>
+</html>
