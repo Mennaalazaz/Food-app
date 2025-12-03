@@ -157,96 +157,96 @@ async function getMonthlyReport(restaurantId) {
 }
 
 // ==================== MENU FUNCTIONS ====================
-async function loadRestaurantMenu() {
+document.addEventListener('DOMContentLoaded', function() {
+  if (document.getElementById('menu-items')) {
+    loadFoodsByRestaurant(1); // Load restaurant 1 foods
+  }
+  updateCartCount();
+});
+
+
+// =======================
+// Load Categories
+// =======================
+async function loadCategories() {
   try {
-    // Load Pizza Palace menu (restaurant ID: 1)
-    const restaurantId = 1;
-    const foods = await getFoodsByRestaurant(restaurantId);
-    const menuItems = document.getElementById('menu-items');
+    const res = await fetch("http://localhost:3000/api/categories");
+    const categories = await res.json();
 
-    if (menuItems) {
-      menuItems.innerHTML = '';
+    const tabs = document.getElementById("categoryTabs");
+    tabs.innerHTML = "";
 
-      // Add restaurant header
-      const header = document.createElement('div');
-      header.className = 'restaurant-header';
-      header.innerHTML = `
-        <h2>🍕 Pizza Palace Menu</h2>
-        <p>Authentic Italian pizzas made with fresh ingredients</p>
-      `;
-      menuItems.appendChild(header);
+    categories.forEach(cat => {
+      const tab = document.createElement("button");
+      tab.className = "category-tab";
+      tab.innerText = cat.Name;
 
-      // Group foods by category
-      const foodsByCategory = {};
-      foods.forEach(food => {
-        const categoryId = food.Category_ID;
-        if (!foodsByCategory[categoryId]) {
-          foodsByCategory[categoryId] = [];
-        }
-        foodsByCategory[categoryId].push(food);
-      });
+      tab.onclick = () => loadFoodsByCategory(cat.Category_ID);
+      tabs.appendChild(tab);
+    });
 
-      // Display foods grouped by category
-      Object.keys(foodsByCategory).forEach(categoryId => {
-        const categoryFoods = foodsByCategory[categoryId];
-        const categoryName = getCategoryNameById(categoryId);
-
-        const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'menu-category';
-        categoryDiv.id = `category-${categoryId}`;
-
-        // Category title
-        const categoryTitle = document.createElement('h3');
-        categoryTitle.className = 'category-title';
-        categoryTitle.textContent = `${getCategoryEmoji(categoryName)} ${categoryName}`;
-        categoryDiv.appendChild(categoryTitle);
-
-        // Food items
-        categoryFoods.forEach(food => {
-          const foodCard = document.createElement('div');
-          foodCard.className = 'menu-card';
-
-          foodCard.innerHTML = `
-            <img src="${food.image || './assets/pizza-6664791_1280.jpg'}" alt="${food.Name}">
-            <h3>${food.Name}</h3>
-            <p>$${food.Price}</p>
-            <button onclick="addToCart(${food.Food_ID}, '${food.Name}', ${food.Price})">Add to Cart</button>
-          `;
-
-          categoryDiv.appendChild(foodCard);
-        });
-
-        menuItems.appendChild(categoryDiv);
-      });
-    }
   } catch (error) {
-    console.error('Error loading restaurant menu:', error);
+    console.error("Error loading categories:", error);
   }
 }
 
-function getCategoryNameById(categoryId) {
-  const categoryMap = {
-    1: 'Pizza',
-    2: 'Burgers',
-    3: 'Main Courses',
-    4: 'Sandwiches',
-    5: 'Desserts',
-    6: 'Beverages'
-  };
-  return categoryMap[categoryId] || 'Other';
+// =======================
+// Load foods by restaurant
+// =======================
+let allFoods = [];
+
+async function loadFoodsByRestaurant(restaurantId) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/foods/restaurant/${restaurantId}`);
+    allFoods = await res.json();
+    displayFoods(allFoods);
+
+  } catch (error) {
+    console.error("Error loading foods:", error);
+  }
 }
 
-function getCategoryEmoji(categoryName) {
-  const emojiMap = {
-    'Pizza': '🍕',
-    'Burgers': '🍔',
-    'Main Courses': '🥩',
-    'Sandwiches': '🥪',
-    'Desserts': '🍰',
-    'Beverages': '🥤'
-  };
-  return emojiMap[categoryName] || '🍽️';
+// =======================
+// Load foods by category
+// =======================
+async function loadFoodsByCategory(categoryId) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/foods/category/${categoryId}`);
+    const foods = await res.json();
+    displayFoods(foods);
+
+  } catch (error) {
+    console.error("Error loading foods by category:", error);
+  }
 }
+
+// =======================
+// Display Foods Grid
+// =======================
+function displayFoods(foods) {
+  const grid = document.getElementById("menu-items");
+  grid.innerHTML = "";
+
+  if (foods.length === 0) {
+    grid.innerHTML = "<p>No items found.</p>";
+    return;
+  }
+
+  foods.forEach(food => {
+    grid.innerHTML += `
+      <div class="menu-card">
+        <img src="${food.imageURL}" alt="${food.Name}">
+        <h3>${food.Name}</h3>
+        <p>${food.Description || ""}</p>
+        <span class="price">${food.Price} EGP</span>
+      </div>
+    `;
+  });
+}
+
+
+
+
 
 // ==================== CART FUNCTIONS ====================
 function addToCart(foodId, name, price) {
