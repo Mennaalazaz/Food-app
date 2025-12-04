@@ -40,7 +40,7 @@ const getRestaurantOrders = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { Status } = req.body;
+    const { status } = req.body;
 
     const order = await Order_Details.findOne({ where: { Order_ID: orderId } });
     if (!order) return res.status(404).json({ message: "Order not found" });
@@ -49,7 +49,13 @@ const updateOrderStatus = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    order.status = Status;
+    // Validate status
+    const validStatuses = ["pending", "confirmed", "preparing", "ready", "delivered", "cancelled"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    order.status = status;
     await order.save();
 
     res.json({ message: "Order status updated", order });

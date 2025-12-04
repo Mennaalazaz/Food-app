@@ -15,7 +15,6 @@
         class="sidebar-logo"
       />
       <a href="Dashboard.html">Dashboard</a>
-      <a href="manage-orders.html">Manage Orders</a>
       <a href="reports.html">Reports</a>
       <a href="index.html">Sign Out</a>
       <a href="javascript:void(0)" class="close-btn" onclick="closeSidebar()"
@@ -113,6 +112,12 @@
 
         loadDashboardStats(restaurantId);
         loadDashboardOrders(restaurantId);
+
+        // Auto-refresh data every 30 seconds
+        setInterval(() => {
+          loadDashboardStats(restaurantId);
+          loadDashboardOrders(restaurantId);
+        }, 30000);
       });
 
       let allOrders = [];
@@ -213,7 +218,7 @@
                 }
                 ${
                   order.status === "delivered"
-                    ? '<button class="theme-btn">View</button>'
+                    ? `<button class="theme-btn" onclick="viewOrderDetails(${order.Order_ID})">View</button>`
                     : ""
                 }
               </td>
@@ -265,14 +270,45 @@
         try {
           await updateOrderStatusDashboard(orderId, status);
           alert("Order status updated successfully!");
-          // Reload orders
+          // Reload orders and stats
           const restaurantId = localStorage.getItem("restaurantId");
           loadDashboardOrders(restaurantId);
           loadDashboardStats(restaurantId);
         } catch (error) {
           console.error("Error updating order status:", error);
-          alert("Error updating order status");
+          alert("Error updating order status: " + error.message);
         }
+      }
+
+      function viewOrderDetails(orderId) {
+        // Find the order from allOrders
+        const order = allOrders.find((o) => o.Order_ID === orderId);
+        if (!order) {
+          alert("Order not found");
+          return;
+        }
+
+        const items = order.Order_Items.map(
+          (item) => `${item.Food.Name} x${item.Quantity} - $${item.Subtotal}`
+        ).join("\n");
+
+        const details = `
+Order ID: #${order.Order_ID}
+Customer: ${order.User.username}
+Email: ${order.User.email}
+Phone: ${order.User.phone}
+Address: ${order.address}
+Status: ${getStatusText(order.status)}
+Total: $${order.Price}
+Payment Method: ${order.Payment_Method}
+
+Items:
+${items}
+
+Order Date: ${new Date(order.CreatedAt).toLocaleString()}
+        `;
+
+        alert(details);
       }
     </script>
   </body>

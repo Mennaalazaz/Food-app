@@ -512,11 +512,24 @@ async function simulateOrderProgress() {
                     body: JSON.stringify({ status: statusMap[step] })
                 });
 
+                // Update localStorage currentOrder status
+                currentOrder.status = step;
+                localStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+
+                // Update order history in localStorage
+                let orderHistory = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                const orderIndex = orderHistory.findIndex(order => order.orderId === currentOrder.orderId);
+                if (orderIndex !== -1) {
+                    orderHistory[orderIndex].status = step;
+                    localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+                }
+
                 // Update frontend
                 updateOrderStatus(step);
                 step++;
             } catch (error) {
                 console.error('Error updating order status:', error);
+                alert('Error updating order status: ' + error.message);
                 clearInterval(orderTimer);
             }
         } else {
@@ -753,7 +766,7 @@ async function initializeOrderTracking() {
                 'pending': 0,
                 'confirmed': 0,
                 'preparing': 1,
-                'ready': 1,
+                'ready': 2,
                 'delivered': 3,
                 'cancelled': 3
             };

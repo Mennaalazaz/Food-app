@@ -121,7 +121,7 @@ a:hover {
   padding: 10px 15px;
   text-decoration: none;
   font-size: 18px;
-  background-color: #F64D00;
+  background-color: #f1601c;
   color: #014325;
   border-radius: 50px;
   width: 80%;
@@ -130,7 +130,7 @@ a:hover {
 }
 
 .sidebar a:hover {
-  background-color: #d93f00;
+  background-color: #ef5315;
   color: #fff;
 }
 
@@ -284,7 +284,7 @@ header {
 }
 
 .review-card {
-  background: linear-gradient(135deg, #8a8782 0%, #ededce 100%);
+  background: linear-gradient(135deg, #e88a10 0%, #ededce 100%);
   padding: 20px;
   border-radius: 15px;
   width: 250px;
@@ -457,7 +457,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f9f9f9;
+  background: #edd6b5;
   padding: 15px;
   border-radius: 8px;
 }
@@ -1398,4 +1398,12 @@ textarea {
 
 .theme-btn.secondary:hover {
   background-color: #5a6268;
+}
+
+/* Action column buttons on same line */
+.order-table td:nth-child(6) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
 }
