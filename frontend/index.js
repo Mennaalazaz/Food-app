@@ -240,6 +240,7 @@ function displayFoods(foods) {
         <h3>${food.Name}</h3>
         <p>${food.Description || ""}</p>
         <span class="price">${food.Price} EGP</span>
+        <button class="add-to-cart-btn" onclick="addToCart(${food.Food_ID}, '${food.Name}', ${food.Price})">Add to Cart</button>
       </div>
     `;
   });

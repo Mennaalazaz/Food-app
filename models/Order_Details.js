@@ -14,10 +14,11 @@ const Order_Details = sequelize.define("Order_Details", {
     type: DataTypes.ENUM("pending", "confirmed", "preparing", "ready", "delivered", "cancelled"),
     defaultValue: "pending"
   },
+  address: { type: DataTypes.STRING, allowNull: true },
   CreatedAt: { type: DataTypes.DATE },
   UpdatedAt: { type: DataTypes.DATE }
 }, {
-  tableName: "Order_Details",
+  tableName: "order_details",
   timestamps: true,
   createdAt: "CreatedAt",
   updatedAt: "UpdatedAt"

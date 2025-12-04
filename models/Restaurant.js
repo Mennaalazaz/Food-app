@@ -11,7 +11,7 @@ const Restaurant = sequelize.define("Restaurant", {
   logoURL: { type: DataTypes.STRING(255) },
   is_active: { type: DataTypes.BOOLEAN, defaultValue: true }
 }, {
-  tableName: "Restaurant",
+  tableName: "restaurant",
   timestamps: true
 });
 

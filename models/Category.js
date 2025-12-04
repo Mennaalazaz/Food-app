@@ -7,7 +7,7 @@ const Category = sequelize.define("Category", {
   CreatedAt: { type: DataTypes.DATE },
   UpdatedAt: { type: DataTypes.DATE }
 }, {
-  tableName: "Category",
+  tableName: "category",
   timestamps: false
 });
 

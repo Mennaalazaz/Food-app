@@ -1,23 +1,47 @@
 const { Order_Details, Order_Item, Food } = require("../models");
 
 const placeOrder = async (req, res) => {
-  const { userId, restaurantId, cart, paymentMethod } = req.body;
+  const { address, payment_method, items, total } = req.body;
+  const userId = req.user.id;
 
   try {
-    if (!cart || cart.length === 0) {
+    if (!items || items.length === 0) {
       return res.status(400).json({ message: "Cart is empty" });
     }
 
-    // Calculate total price
+    // Get restaurantId from the first food item and validate all items are from the same restaurant
+    const firstFood = await Food.findByPk(items[0].food_id);
+    if (!firstFood) {
+      return res.status(400).json({
+        message: `Food ID ${items[0].food_id} not found`,
+      });
+    }
+    const restaurantId = firstFood.Restaurant_ID;
+
+    // Calculate total price and validate all items are from the same restaurant
     let totalPrice = 0;
-    for (let item of cart) {
-      const food = await Food.findByPk(item.foodId);
+    for (let item of items) {
+      const food = await Food.findByPk(item.food_id);
       if (!food)
         return res.status(400).json({
-          message: `Food ID ${item.foodId} not found`,
+          message: `Food ID ${item.food_id} not found`,
         });
 
+      if (food.Restaurant_ID !== restaurantId) {
+        return res.status(400).json({
+          message: `All items must be from the same restaurant. Item ${item.food_id} is from a different restaurant.`,
+        });
+      }
+
       totalPrice += food.Price * item.quantity;
+    }
+
+    // Map frontend payment methods to backend enum values
+    let mappedPaymentMethod = payment_method;
+    if (payment_method === "card") {
+      mappedPaymentMethod = "credit_card";
+    } else if (payment_method === "wallet") {
+      mappedPaymentMethod = "cash"; // Assuming wallet defaults to cash
     }
 
     // Create order
@@ -25,20 +49,20 @@ const placeOrder = async (req, res) => {
       User_ID: userId,
       Restaurant_ID: restaurantId,
       Price: totalPrice,
-      Payment_Method: paymentMethod || "cash",
+      Payment_Method: mappedPaymentMethod || "cash",
       status: "pending",
+      address: address,
     });
 
     // Create each order item
-    for (let item of cart) {
-      const food = await Food.findByPk(item.foodId);
+    for (let item of items) {
+      const food = await Food.findByPk(item.food_id);
 
       await Order_Item.create({
         Order_ID: order.Order_ID,
         Food_ID: food.Food_ID,
         Quantity: item.quantity,
         Price: food.Price,
-        Subtotal: food.Price * item.quantity,
       });
     }
 
