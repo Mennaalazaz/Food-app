@@ -159,7 +159,8 @@ async function getMonthlyReport(restaurantId) {
 // ==================== MENU FUNCTIONS ====================
 document.addEventListener('DOMContentLoaded', function() {
   if (document.getElementById('menu-items')) {
-    loadFoodsByRestaurant(1); // Load restaurant 1 foods
+    loadCategories(); // Load categories dynamically
+    loadFoodsByRestaurant(1); // Load restaurant 1 foods initially
   }
   updateCartCount();
 });
@@ -178,7 +179,7 @@ async function loadCategories() {
 
     categories.forEach(cat => {
       const tab = document.createElement("button");
-      tab.className = "category-tab";
+      tab.className = "category-tabs";
       tab.innerText = cat.Name;
 
       tab.onclick = () => loadFoodsByCategory(cat.Category_ID);
@@ -289,13 +290,7 @@ function closeSidebar() {
   document.getElementById("mySidebar").style.width = "0";
 }
 
-// Initialize menu when page loads
-document.addEventListener('DOMContentLoaded', function() {
-  if (document.getElementById('menu-items')) {
-    loadRestaurantMenu();
-  }
-  updateCartCount();
-});
+
 
 // handle login form submission
 document.addEventListener("DOMContentLoaded", () => {

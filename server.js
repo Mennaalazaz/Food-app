@@ -8,6 +8,7 @@ app.use(cors());
 
 // Middleware
 app.use(express.json());
+app.use(express.static('frontend'));
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
