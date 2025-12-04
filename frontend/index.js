@@ -104,6 +104,10 @@ async function getRestaurantOrders(restaurantId) {
   return await apiRequest(`/orders/restaurant/${restaurantId}`);
 }
 
+async function getOrderStatus(orderId) {
+  return await apiRequest(`/orders/status/${orderId}`);
+}
+
 // ==================== REVIEW APIs ====================
 async function getOrderStatus(orderId) {
   return await apiRequest(`/reviews/${orderId}/status`);
@@ -324,10 +328,22 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("token", data.token);
       }
 
+      // Save user data for dashboard
+      if (data.type === "restaurant") {
+        localStorage.setItem("userType", "restaurant");
+        localStorage.setItem("restaurantId", data.restaurant.Restaurant_ID);
+      } else {
+        localStorage.setItem("userType", "user");
+      }
+
       alert("Login successful!");
 
-      // Redirect user to home/dashboard page
-      window.location.href = "home.html";
+      // Redirect based on user type
+      if (data.type === "restaurant") {
+        window.location.href = "Dashboard.html";
+      } else {
+        window.location.href = "Home.html";
+      }
 
     } catch (error) {
       console.error("Error during login:", error);
@@ -554,13 +570,13 @@ function closeReviewModal() {
 // Handle Checkout Form
 document.addEventListener('DOMContentLoaded', function() {
     // ... الكود القديم ...
-    
+
     const checkoutForm = document.getElementById('checkoutForm');
-    
+
     if (checkoutForm) {
-        checkoutForm.addEventListener('submit', function(e) {
+        checkoutForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             // Get form data
             const customerName = document.getElementById('customerName').value.trim();
             const customerEmail = document.getElementById('customerEmail').value.trim();
@@ -569,53 +585,82 @@ document.addEventListener('DOMContentLoaded', function() {
             const city = document.getElementById('city').value.trim();
             const postalCode = document.getElementById('postalCode').value.trim();
             const paymentMethod = document.querySelector('input[name="payment"]:checked');
-            
+
             // Validate all fields
             if (!customerName || !customerEmail || !customerPhone || !streetAddress || !city || !postalCode) {
                 alert('⚠️ Please fill in all fields!');
                 return;
             }
-            
+
             if (!paymentMethod) {
                 alert('⚠️ Please select a payment method!');
                 return;
             }
-            
-            // Generate order number
-            const orderNumber = generateOrderNumber();
-            
-            // Create order object
-            const order = {
-                orderNumber: orderNumber,
-                customerName: customerName,
-                customerEmail: customerEmail,
-                customerPhone: customerPhone,
-                address: {
-                    street: streetAddress,
-                    city: city,
-                    postalCode: postalCode
-                },
-                paymentMethod: paymentMethod.value,
-                items: [
-                    { name: 'Pepperoni Pizza', quantity: 1, price: 12 },
-                    { name: 'Classic Burger', quantity: 2, price: 16 }
-                ],
-                total: 28,
-                status: 0, // 0: Order Placed, 1: Preparing, 2: Out for Delivery, 3: Delivered
-                orderDate: new Date().toISOString(),
-                estimatedDelivery: 30
+
+            // Get cart items
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) {
+                alert('⚠️ Your cart is empty!');
+                return;
+            }
+
+            // Prepare order data for backend
+            const orderData = {
+                address: `${streetAddress}, ${city}, ${postalCode}`,
+                payment_method: paymentMethod.value,
+                items: cart.map(item => ({
+                    food_id: item.id,
+                    quantity: item.quantity
+                })),
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
             };
-            
-            // Save order to localStorage
-            localStorage.setItem('currentOrder', JSON.stringify(order));
-            
-            // Add to order history
-            let orderHistory = JSON.parse(localStorage.getItem('orderHistory') || '[]');
-            orderHistory.push(order);
-            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-            
-            // Show confirmation modal
-            showOrderConfirmation(orderNumber);
+
+            try {
+                // Place order via API
+                const orderResponse = await placeOrder(orderData);
+                const orderId = orderResponse.orderId;
+
+                // Generate order number for display
+                const orderNumber = generateOrderNumber();
+
+                // Create order object for localStorage
+                const order = {
+                    orderId: orderId,
+                    orderNumber: orderNumber,
+                    customerName: customerName,
+                    customerEmail: customerEmail,
+                    customerPhone: customerPhone,
+                    address: {
+                        street: streetAddress,
+                        city: city,
+                        postalCode: postalCode
+                    },
+                    paymentMethod: paymentMethod.value,
+                    items: cart,
+                    total: orderData.total,
+                    status: 0, // 0: Order Placed, 1: Preparing, 2: Out for Delivery, 3: Delivered
+                    orderDate: new Date().toISOString(),
+                    estimatedDelivery: 30
+                };
+
+                // Save order to localStorage
+                localStorage.setItem('currentOrder', JSON.stringify(order));
+
+                // Add to order history
+                let orderHistory = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+                orderHistory.push(order);
+                localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+
+                // Clear cart
+                localStorage.removeItem('cart');
+                updateCartCount();
+
+                // Show confirmation modal
+                showOrderConfirmation(orderNumber);
+            } catch (error) {
+                console.error('Error placing order:', error);
+                alert('❌ Failed to place order. Please try again.');
+            }
         });
     }
 });
@@ -642,29 +687,45 @@ function goToTrackOrder() {
 }
 
 
-function initializeOrderTracking() {
+async function initializeOrderTracking() {
     // Load current order from localStorage
     const currentOrder = JSON.parse(localStorage.getItem('currentOrder'));
-    
+
     if (currentOrder) {
         // Update order display
         document.getElementById('orderNumberDisplay').textContent = `Order #${currentOrder.orderNumber}`;
         document.getElementById('deliveryTime').textContent = `Estimated Delivery: ${currentOrder.estimatedDelivery} minutes`;
-        
+
         // Display items
-        const itemsText = currentOrder.items.map(item => 
+        const itemsText = currentOrder.items.map(item =>
             `${item.name} x${item.quantity}`
         ).join(', ');
         document.getElementById('orderItems').textContent = `Items: ${itemsText}`;
-        
+
         // Display address
         const addressEl = document.getElementById('deliveryAddress');
         if (addressEl) {
             addressEl.textContent = `Delivering to: ${currentOrder.address.street}, ${currentOrder.address.city}`;
         }
-        
-        // Update order status
-        updateOrderStatus(currentOrder.status);
+
+        // Fetch real-time order status from backend
+        try {
+            const statusResponse = await getOrderStatus(currentOrder.orderId);
+            const statusMap = {
+                'pending': 0,
+                'confirmed': 0,
+                'preparing': 1,
+                'ready': 1,
+                'delivered': 3,
+                'cancelled': 3
+            };
+            const statusStep = statusMap[statusResponse.status] || 0;
+            updateOrderStatus(statusStep);
+        } catch (error) {
+            console.error('Error fetching order status:', error);
+            // Fallback to localStorage status
+            updateOrderStatus(currentOrder.status);
+        }
     } else {
         // No active order
         updateOrderStatus(0);

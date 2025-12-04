@@ -6,6 +6,7 @@ const auth = require('../middleware/authMiddleware');
 // Customer
 router.get('/user/:user_id', auth.verifyToken, auth.isUser, orderController.getUserOrders);
 router.post('/place', auth.verifyToken, auth.isUser, orderController.placeOrder);
+router.get('/status/:orderId', auth.verifyToken, auth.isUser, orderController.getOrderStatus);
 
 // Admin / Restaurant
 router.get('/restaurant/:id', auth.verifyToken, auth.isRestaurant, orderController.getOrdersByRestaurant);

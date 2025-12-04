@@ -63,6 +63,7 @@ const placeOrder = async (req, res) => {
         Food_ID: food.Food_ID,
         Quantity: item.quantity,
         Price: food.Price,
+        Subtotal: food.Price * item.quantity,
       });
     }
 
@@ -116,4 +117,20 @@ const getOrdersByRestaurant = async (req, res) => {
   } 
 };
 
-module.exports = { placeOrder, getUserOrders, getOrdersByRestaurant };
+const getOrderStatus = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const order = await Order_Details.findByPk(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.json({ status: order.status });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { placeOrder, getUserOrders, getOrdersByRestaurant, getOrderStatus };

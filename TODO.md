@@ -12,4 +12,4 @@
 - [ ] Test adding items to cart from menu
 - [ ] Test viewing cart with items and total
 - [ ] Test checkout process and order placement
-- [ ] Verify backend integration for order placement
+- [x] Verify backend integration for order placement
