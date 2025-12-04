@@ -260,13 +260,14 @@ header {
 }
 /* Reviews Section */
 .reviews {
-  background-color: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #c5af7b 50%, #deac95 100%);
   padding: 40px 20px;
   text-align: center;
   border-radius: 20px;
   margin: 40px auto;
   max-width: 900px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #F64D00;
 }
 
 .reviews h2 {
@@ -283,12 +284,13 @@ header {
 }
 
 .review-card {
-  background: #F2E7CB;
+  background: linear-gradient(135deg, #8a8782 0%, #ededce 100%);
   padding: 20px;
   border-radius: 15px;
   width: 250px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #F64D00;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .review-card:hover {
@@ -390,12 +392,13 @@ header {
 }
 .menu-card {
   transition: transform 0.3s, box-shadow 0.3s;
-  background: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #efc156 50%, #e7a88b 100%);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   text-align: center;
   gap: 10px;
   padding: 15px;
+  border: 1px solid #F64D00;
 }
 
 .menu-card img {
@@ -438,9 +441,10 @@ header {
   max-width: 800px;
   margin: 40px auto;
   padding: 20px;
-  background: #fff;
+  background: linear-gradient(135deg, #efc156 0%, #e7a88b 100%);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
 }
 
 .cart-items {
@@ -505,9 +509,10 @@ header {
   max-width: 700px;
   margin: 40px auto;
   padding: 20px;
-  background: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
   text-align: center;
 }
 
@@ -552,9 +557,10 @@ header {
   max-width: 600px;
   margin: 40px auto;
   padding: 30px;
-  background: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
 }
 
 .checkout-form {
@@ -609,10 +615,11 @@ header {
 .order-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
   margin-top: 20px;
 }
 
@@ -656,9 +663,10 @@ header {
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
-  background: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
   text-align: center;
 }
 
@@ -717,9 +725,10 @@ textarea {
 }
 
 .stat-card {
-  background: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
   text-align: center;
   padding: 20px;
 }
@@ -731,10 +740,11 @@ textarea {
 .order-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
 }
 
 .order-table th, .order-table td {
@@ -803,18 +813,274 @@ textarea {
   margin: 20px 0;
 }
 
+/* Order History Styles */
+.order-history-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 1px 8px rgba(0,0,0,0.04);
+  animation: fadeInUp 0.8s ease;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.order-history-title {
+  color: #014325;
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.order-table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.order-table th {
+  background: linear-gradient(135deg, #F64D00 0%, #d93f00 100%);
+  color: white;
+  padding: 18px 15px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.order-table th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FFB40B 0%, #F64D00 100%);
+}
+
+.order-table td {
+  padding: 18px 15px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 15px;
+}
+
+.order-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.order-table tbody tr:hover {
+  background-color: rgba(246, 77, 0, 0.05);
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(246, 77, 0, 0.1);
+}
+
+.order-table tbody tr:nth-child(even) {
+  background-color: rgba(242, 231, 203, 0.3);
+}
+
+.order-table tbody tr:nth-child(even):hover {
+  background-color: rgba(246, 77, 0, 0.08);
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.status-pending {
+  background: linear-gradient(135deg, #FFC107 0%, #ff9800 100%);
+  color: #333;
+  box-shadow: 0 2px 5px rgba(255, 193, 7, 0.3);
+}
+
+.status-confirmed, .status-preparing, .status-ready {
+  background: linear-gradient(135deg, #2196F3 0%, #1976d2 100%);
+  color: white;
+  box-shadow: 0 2px 5px rgba(33, 150, 243, 0.3);
+}
+
+.status-delivered {
+  background: linear-gradient(135deg, #4CAF50 0%, #388e3c 100%);
+  color: white;
+  box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
+}
+
+.status-cancelled {
+  background: linear-gradient(135deg, #F44336 0%, #d32f2f 100%);
+  color: white;
+  box-shadow: 0 2px 5px rgba(244, 67, 54, 0.3);
+}
+
+.status-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Track Button */
+.track-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #F64D00 0%, #d93f00 100%);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  min-width: 70px;
+}
+
+.track-btn:hover {
+  background: linear-gradient(135deg, #d93f00 0%, #b83200 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(246, 77, 0, 0.4);
+}
+
+.track-btn:active {
+  transform: translateY(0);
+}
+
+/* Loading and Error Styles */
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #014325;
+  padding: 40px;
+  animation: pulse 2s infinite;
+}
+
+.error {
+  text-align: center;
+  font-size: 16px;
+  color: #F44336;
+  padding: 20px;
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border-radius: 10px;
+  margin: 20px 0;
+  border-left: 4px solid #F44336;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 /* Responsive Table */
 @media (max-width: 768px) {
+  .order-history-container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .order-history-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
   .order-table {
     font-size: 14px;
   }
 
   .order-table th, .order-table td {
-    padding: 10px 5px;
+    padding: 12px 8px;
   }
 
-  .order-table ul {
-    padding-left: 15px;
+  .order-table th {
+    font-size: 14px;
+  }
+
+  .status-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    min-width: 70px;
+  }
+
+  .track-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+    min-width: 60px;
+  }
+
+  .order-table-wrapper {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+}
+
+@media (max-width: 480px) {
+  .order-history-container {
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .order-history-title {
+    font-size: 1.8rem;
+  }
+
+  .order-table th, .order-table td {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+
+  .order-table th {
+    font-size: 12px;
+  }
+
+  .status-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+    min-width: 60px;
+  }
+
+  .track-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+    min-width: 55px;
   }
 }
 

@@ -133,4 +133,29 @@ const getOrderStatus = async (req, res) => {
   }
 };
 
-module.exports = { placeOrder, getUserOrders, getOrdersByRestaurant, getOrderStatus };
+const simulateOrderStatus = async (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const order = await Order_Details.findByPk(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.User_ID !== userId) {
+      return res.status(403).json({ message: "You can only update your own orders" });
+    }
+
+    order.status = status;
+    await order.save();
+
+    res.json({ message: "Order status updated for simulation", status: order.status });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { placeOrder, getUserOrders, getOrdersByRestaurant, getOrderStatus, simulateOrderStatus };

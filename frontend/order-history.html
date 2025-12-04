@@ -29,27 +29,33 @@
     </header>
 
     <!-- Order History Section -->
-    <section class="track-container">
-      <h1>Order History</h1>
+    <section class="order-history-container">
+      <h1 class="order-history-title">Order History</h1>
 
       <div id="loading" class="loading">Loading your orders...</div>
       <div id="error" class="error" style="display: none"></div>
 
-      <table class="order-table" id="orderTable" style="display: none">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Total Amount</th>
-            <th>Order Date</th>
-            <th>Status</th>
-            <th>Items Ordered</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="orderTableBody">
-          <!-- Dynamic rows will be inserted here -->
-        </tbody>
-      </table>
+      <div
+        class="order-table-wrapper"
+        id="orderTableWrapper"
+        style="display: none"
+      >
+        <table class="order-table" id="orderTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Total Amount</th>
+              <th>Order Date</th>
+              <th>Status</th>
+              <th>Items Ordered</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="orderTableBody">
+            <!-- Dynamic rows will be inserted here -->
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <!-- Footer -->
@@ -77,6 +83,7 @@
       document.addEventListener("DOMContentLoaded", async function () {
         const loadingEl = document.getElementById("loading");
         const errorEl = document.getElementById("error");
+        const tableWrapperEl = document.getElementById("orderTableWrapper");
         const tableEl = document.getElementById("orderTable");
         const tbodyEl = document.getElementById("orderTableBody");
 
@@ -105,9 +112,12 @@
             return;
           }
 
-          // Display orders
-          orders.forEach(async (order) => {
+          // Display orders with animation
+          orders.forEach(async (order, index) => {
             const row = document.createElement("tr");
+            row.style.opacity = "0";
+            row.style.transform = "translateY(20px)";
+            row.style.transition = "opacity 0.5s ease, transform 0.5s ease";
 
             const itemsText = order.Order_Items.map(
               (item) => `${item.Food.Name} x${item.Quantity}`
@@ -130,17 +140,28 @@
               <td>${order.Order_ID}</td>
               <td>${order.Price} EGP</td>
               <td>${new Date(order.CreatedAt).toLocaleDateString()}</td>
-              <td>${statusText}</td>
+              <td><span class="status-badge status-${statusText.toLowerCase()}">${statusText}</span></td>
               <td>${itemsText}</td>
-              <td><button onclick="trackOrder(${
+              <td><button class="track-btn" onclick="trackOrder(${
                 order.Order_ID
               })">Track</button></td>
             `;
 
             tbodyEl.appendChild(row);
+
+            // Animate row appearance
+            setTimeout(() => {
+              row.style.opacity = "1";
+              row.style.transform = "translateY(0)";
+            }, index * 100);
           });
 
-          tableEl.style.display = "table";
+          tableWrapperEl.style.display = "block";
+          // Animate table appearance
+          setTimeout(() => {
+            tableWrapperEl.style.opacity = "1";
+            tableWrapperEl.style.transform = "translateY(0)";
+          }, 200);
         } catch (error) {
           console.error("Error loading order history:", error);
           errorEl.textContent =

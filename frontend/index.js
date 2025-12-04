@@ -165,6 +165,24 @@ document.addEventListener('DOMContentLoaded', function() {
   if (document.getElementById('menu-items')) {
     loadCategories(); // Load categories dynamically
     loadFoodsByRestaurant(1); // Load restaurant 1 foods initially
+
+    // Add search functionality
+    const searchButton = document.getElementById('searchButton');
+    const searchInput = document.getElementById('searchInput');
+
+    if (searchButton && searchInput) {
+      searchButton.addEventListener('click', function() {
+        const query = searchInput.value.toLowerCase().trim();
+        if (query === '') {
+          displayFoods(allFoods); // Show all if no query
+        } else {
+          const filteredFoods = allFoods.filter(food =>
+            food.Name.toLowerCase().includes(query)
+          );
+          displayFoods(filteredFoods);
+        }
+      });
+    }
   }
   updateCartCount();
 });
@@ -187,6 +205,7 @@ async function loadCategories() {
       tab.innerText = cat.Name;
 
       tab.onclick = () => loadFoodsByCategory(cat.Category_ID);
+      tab.ondblclick = () => displayFoods(allFoods); // Double-click to return to all
       tabs.appendChild(tab);
     });
 
@@ -472,15 +491,34 @@ function updateOrderStatus(step) {
 }
 
 // Simulate order progress (for testing)
-function simulateOrderProgress() {
+async function simulateOrderProgress() {
+    const currentOrder = JSON.parse(localStorage.getItem('currentOrder'));
+    if (!currentOrder) {
+        alert('No active order to simulate.');
+        return;
+    }
+
     let step = 0;
-    
+    const statusMap = ['pending', 'preparing', 'ready', 'delivered'];
+
     clearInterval(orderTimer);
-    
-    orderTimer = setInterval(() => {
+
+    orderTimer = setInterval(async () => {
         if (step <= 3) {
-            updateOrderStatus(step);
-            step++;
+            try {
+                // Update backend status
+                await apiRequest(`/orders/simulate-status/${currentOrder.orderId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status: statusMap[step] })
+                });
+
+                // Update frontend
+                updateOrderStatus(step);
+                step++;
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                clearInterval(orderTimer);
+            }
         } else {
             clearInterval(orderTimer);
         }
