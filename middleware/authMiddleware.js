@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+// check if token is valid for all routes that require authentication
 const verifyToken = (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];

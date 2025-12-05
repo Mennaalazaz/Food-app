@@ -6,6 +6,26 @@ function getToken() {
   return localStorage.getItem('token');
 }
 
+// Utility function to get user ID from token
+function getUserId() {
+  const token = getToken();
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.id;
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
+}
+
+// Utility function to get user-specific cart key
+function getCartKey() {
+  const userId = getUserId();
+  return userId ? `cart_${userId}` : 'cart';
+}
+
 // Utility function for API requests
 async function apiRequest(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
@@ -275,7 +295,8 @@ function displayFoods(foods) {
 
 // ==================== CART FUNCTIONS ====================
 function addToCart(foodId, name, price) {
-  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const cartKey = getCartKey();
+  let cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
 
   const existingItem = cart.find(item => item.id === foodId);
   if (existingItem) {
@@ -289,13 +310,14 @@ function addToCart(foodId, name, price) {
     });
   }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
+  localStorage.setItem(cartKey, JSON.stringify(cart));
   alert(`${name} added to cart!`);
   updateCartCount();
 }
 
 function updateCartCount() {
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const cartKey = getCartKey();
+  const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // Update cart count in header if exists
@@ -649,7 +671,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Get cart items
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartKey = getCartKey();
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
             if (cart.length === 0) {
                 alert('⚠️ Your cart is empty!');
                 return;
