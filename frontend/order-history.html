@@ -48,7 +48,6 @@
               <th>Order Date</th>
               <th>Status</th>
               <th>Items Ordered</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody id="orderTableBody">
@@ -142,9 +141,6 @@
               <td>${new Date(order.CreatedAt).toLocaleDateString()}</td>
               <td><span class="status-badge status-${statusText.toLowerCase()}">${statusText}</span></td>
               <td>${itemsText}</td>
-              <td><button class="track-btn" onclick="trackOrder(${
-                order.Order_ID
-              })">Track</button></td>
             `;
 
             tbodyEl.appendChild(row);
@@ -170,11 +166,6 @@
           loadingEl.style.display = "none";
         }
       });
-
-      function trackOrder(orderId) {
-        // Redirect to track page with order ID
-        window.location.href = `trackMyOrder.html?orderId=${orderId}`;
-      }
     </script>
   </body>
 </html>
