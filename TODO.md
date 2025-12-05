@@ -1,14 +1,4 @@
-# TODO: Update reports.html with Dynamic Data
+# TODO: Add Popup for Cart Item Count
 
-## Tasks
-
-- [x] Add JavaScript to reports.html to fetch monthly report data on page load
-- [x] Update summary cards (Total Revenue, Total Orders, Active Customers, Top Item) with dynamic data from API
-- [x] Add error handling for API calls
-- [ ] Test the updated page to ensure data displays correctly
-
-## Notes
-
-- Use getMonthlyReport(restaurantId) from index.js
-- Get restaurantId from localStorage
-- Map API response to UI elements
+- [x] Modify addToCart function in frontend/index.js to show popup with total items in cart
+- [ ] Test the functionality by adding items and verifying the popup

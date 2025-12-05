@@ -462,6 +462,29 @@ header {
   border-radius: 8px;
 }
 
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-controls button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background-color: #F64D00;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quantity-controls button:hover {
+  background-color: #d93f00;
+}
+
 .cart-item img {
   width: 80px;
   border-radius: 8px;
