@@ -163,3 +163,46 @@ VALUES
 (1, 6, 'Fresh Orange Juice', 'Squeezed orange juice', 35.00, 'https://res.cloudinary.com/dcqluerz5/image/upload/v1764846472/orangeJuice_kymbsw.jpg'),
 (1, 6, 'Iced Coffee', 'Coffee with ice and milk', 45.00, 'https://res.cloudinary.com/dcqluerz5/image/upload/v1764846471/icecoffee_mjdfen.jpg');
 
+use food_app_db;
+delimiter $$
+create procedure GetRestaurantStats(
+	in rest_ID int
+    )
+Begin
+	DECLARE totalOrders INT DEFAULT 0;
+	DECLARE totalSales DECIMAL(10,2) DEFAULT 0;
+	DECLARE uniqueUsers INT DEFAULT 0;
+-- Total Orders 
+select count(*) into totalOrders
+from order_details
+where Restaurant_ID=rest_ID;
+
+-- Total Sales
+select IFNULL(sum(Price), 0) INTO totalSales
+from Order_Details
+where Restaurant_ID = rest_ID;
+
+-- Unique Customers
+select count(distinct User_ID) INTO uniqueUsers
+from Order_Details
+where Restaurant_ID = rest_ID;
+
+-- Top 5 dishes
+select
+f.name as food_name,
+sum(oi.Quantity) as total_Quantity
+from Order_item oi
+join Order_Details o on oi.Order_ID = o.Order_ID
+join Food f on oi.Food_ID = f.Food_ID
+where o.Restaurant_ID = rest_ID
+group by f.Name
+order by total_quantity DESC
+limit 5;
+
+-- Results
+select totalOrders as totalOrders, totalSales as totalSales, uniqueUsers as uniqueUsers;
+
+End $$
+
+delimiter ;
+call GetRestaurantStats(1);
